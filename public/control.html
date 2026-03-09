@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+
+body{
+background:#0d1117;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+margin:0;
+}
+
+.pad{
+width:300px;
+height:300px;
+border-radius:50%;
+border:4px solid #00d9ff;
+position:relative;
+box-shadow:0 0 20px #00d9ff;
+}
+
+button{
+position:absolute;
+width:80px;
+height:80px;
+border-radius:50%;
+border:none;
+background:#161b22;
+color:white;
+font-size:30px;
+}
+
+.up{top:10px; left:110px;}
+.down{bottom:10px; left:110px;}
+.left{left:10px; top:110px;}
+.right{right:10px; top:110px;}
+
+</style>
+</head>
+
+<body>
+
+<div class="pad">
+
+<button class="up">↑</button>
+<button class="down">↓</button>
+<button class="left">←</button>
+<button class="right">→</button>
+
+</div>
+
+<script>
+
+const API="https://esp32-rest-api-1-wvw5.onrender.com/command"
+const TOKEN="12345"
+
+let interval=null
+
+function send(cmd){
+
+fetch(API,{
+method:"POST",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+TOKEN
+},
+body:JSON.stringify({command:cmd})
+})
+
+}
+
+function start(cmd){
+
+send(cmd)
+
+interval=setInterval(()=>{
+send(cmd)
+},300)
+
+}
+
+function stop(){
+
+clearInterval(interval)
+send("stop")
+
+}
+
+document.querySelector(".up").onpointerdown=()=>start("up")
+document.querySelector(".down").onpointerdown=()=>start("down")
+document.querySelector(".left").onpointerdown=()=>start("left")
+document.querySelector(".right").onpointerdown=()=>start("right")
+
+document.querySelectorAll("button").forEach(btn=>{
+btn.onpointerup=stop
+btn.onpointerleave=stop
+})
+
+</script>
+
+</body>
+</html>
