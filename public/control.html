@@ -31,12 +31,22 @@ border:none;
 background:#161b22;
 color:white;
 font-size:30px;
+cursor:pointer;
 }
 
 .up{top:10px; left:110px;}
 .down{bottom:10px; left:110px;}
 .left{left:10px; top:110px;}
 .right{right:10px; top:110px;}
+
+.center{
+top:110px;
+left:110px;
+background:#ffb703;
+color:black;
+font-size:22px;
+font-weight:bold;
+}
 
 </style>
 </head>
@@ -61,7 +71,6 @@ const TOKEN="12345"
 let interval=null
 
 function send(cmd){
-
 fetch(API,{
 method:"POST",
 headers:{
@@ -70,24 +79,19 @@ headers:{
 },
 body:JSON.stringify({command:cmd})
 })
-
 }
 
 function start(cmd){
-
 send(cmd)
 
 interval=setInterval(()=>{
 send(cmd)
 },300)
-
 }
 
 function stop(){
-
 clearInterval(interval)
 send("stop")
-
 }
 
 document.querySelector(".up").onpointerdown=()=>start("up")
@@ -95,7 +99,9 @@ document.querySelector(".down").onpointerdown=()=>start("down")
 document.querySelector(".left").onpointerdown=()=>start("left")
 document.querySelector(".right").onpointerdown=()=>start("right")
 
-document.querySelectorAll("button").forEach(btn=>{
+document.querySelector(".center").onclick=()=>send("led_toggle")
+
+document.querySelectorAll(".up, .down, .left, .right").forEach(btn=>{
 btn.onpointerup=stop
 btn.onpointerleave=stop
 })
