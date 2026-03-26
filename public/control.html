@@ -32,16 +32,39 @@ background:#161b22;
 color:white;
 font-size:30px;
 cursor:pointer;
+display:flex;
+justify-content:center;
+align-items:center;
 }
 
-.up{top:10px; left:110px;}
-.down{bottom:10px; left:110px;}
-.left{left:10px; top:110px;}
-.right{right:10px; top:110px;}
+.up{
+top:10px;
+left:50%;
+transform:translateX(-50%);
+}
+
+.down{
+bottom:10px;
+left:50%;
+transform:translateX(-50%);
+}
+
+.left{
+left:10px;
+top:50%;
+transform:translateY(-50%);
+}
+
+.right{
+right:10px;
+top:50%;
+transform:translateY(-50%);
+}
 
 .center{
-top:110px;
-left:110px;
+top:50%;
+left:50%;
+transform:translate(-50%,-50%);
 background:#ffb703;
 color:black;
 font-size:22px;
@@ -54,13 +77,11 @@ font-weight:bold;
 <body>
 
 <div class="pad">
-
-<button class="up">↑</button>
-<button class="down">↓</button>
-<button class="left">←</button>
-<button class="right">→</button>
-<button class="center">●</button>
-
+  <button class="up">↑</button>
+  <button class="down">↓</button>
+  <button class="left">←</button>
+  <button class="right">→</button>
+  <button class="center">●</button>
 </div>
 
 <script>
@@ -71,39 +92,37 @@ const TOKEN="12345"
 let interval=null
 
 function send(cmd){
-fetch(API,{
-method:"POST",
-headers:{
-"Content-Type":"application/json",
-"Authorization":"Bearer "+TOKEN
-},
-body:JSON.stringify({command:cmd})
-})
+  fetch(API,{
+    method:"POST",
+    headers:{
+      "Content-Type":"application/json",
+      "Authorization":"Bearer "+TOKEN
+    },
+    body:JSON.stringify({command:cmd})
+  })
 }
 
 function start(cmd){
-send(cmd)
-
-interval=setInterval(()=>{
-send(cmd)
-},300)
+  send(cmd)
+  interval=setInterval(()=>{
+    send(cmd)
+  },300)
 }
 
 function stop(){
-clearInterval(interval)
-send("stop")
+  clearInterval(interval)
+  send("stop")
 }
 
 document.querySelector(".up").onpointerdown=()=>start("up")
 document.querySelector(".down").onpointerdown=()=>start("down")
 document.querySelector(".left").onpointerdown=()=>start("left")
 document.querySelector(".right").onpointerdown=()=>start("right")
-
 document.querySelector(".center").onclick=()=>send("led_toggle")
 
 document.querySelectorAll(".up, .down, .left, .right").forEach(btn=>{
-btn.onpointerup=stop
-btn.onpointerleave=stop
+  btn.onpointerup=stop
+  btn.onpointerleave=stop
 })
 
 </script>
