@@ -7,10 +7,30 @@
 body{
 background:#0d1117;
 display:flex;
+flex-direction:column;
 justify-content:center;
 align-items:center;
-height:100vh;
+min-height:100vh;
 margin:0;
+padding:20px;
+gap:30px;
+box-sizing:border-box;
+}
+
+.video-wrap{
+width:90vw;
+max-width:700px;
+display:flex;
+justify-content:center;
+}
+
+#cam{
+width:100%;
+max-height:420px;
+background:black;
+border-radius:12px;
+border:2px solid #00d9ff;
+box-shadow:0 0 20px rgba(0,217,255,.35);
 }
 
 .pad{
@@ -76,6 +96,12 @@ font-weight:bold;
 
 <body>
 
+<div class="video-wrap">
+  <video id="cam" controls autoplay muted playsinline>
+    <source src="http://TU_IP_DEL_MAC:8888/cam1/index.m3u8" type="application/x-mpegURL">
+  </video>
+</div>
+
 <div class="pad">
   <button class="up">↑</button>
   <button class="down">↓</button>
@@ -106,7 +132,7 @@ function start(cmd){
   send(cmd)
   interval=setInterval(()=>{
     send(cmd)
-  },300)
+  },100)
 }
 
 function stop(){
